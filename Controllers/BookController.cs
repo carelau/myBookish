@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using mybookish.Database;
 using mybookish.Models;
@@ -26,17 +27,20 @@ namespace mybookish.Controllers
         {
 
             int id = _bookRepository.CreateBook(bookModel);
-            
+
             if (id > 0)
             {
-                return RedirectToAction("AddNewBook", "Book", new { isSuccess = true});
+                return RedirectToAction("AddNewBook", "Book", new { isSuccess = true });
             }
             return View();
         }
 
-        public string GetAllBooks()
+        public IActionResult GetAllBooks()
         {
-            return "All books";
+
+            var books = _bookRepository.GetListBooks();
+
+            return View(books);
         }
 
     }

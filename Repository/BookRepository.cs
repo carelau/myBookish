@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
 using mybookish.Database;
 using mybookish.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace mybookish.Repository
 {
@@ -24,8 +25,21 @@ namespace mybookish.Repository
             _context.SaveChanges();
             return book.Id;
         }
+        public List<BookModel> GetListBooks()
+        {
+            var bookList = new List<BookModel>();
+            var books = _context.Books.ToList();
+            foreach (var book in books)
+            {
+                bookList.Add(new BookModel()
+                {
+                    Title = book.Title,
+                    Author = book.Author
+                });
+            }
 
-
+            return bookList;
+        }
 
     }
 }
