@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using mybookish.Database;
 using mybookish.Models;
 using System.Collections.Generic;
@@ -34,12 +35,56 @@ namespace mybookish.Repository
                 bookList.Add(new BookModel()
                 {
                     Title = book.Title,
-                    Author = book.Author
+                    Author = book.Author,
+                    Id = book.Id,
                 });
             }
-
             return bookList;
         }
 
+        public BookModel GetSingleBookById(int bookId)
+        {
+            var bookDb = _context.Books
+                       .Where(b => b.Id == bookId)
+                       .FirstOrDefault();
+
+            var book = new BookModel()
+            {
+                Title = bookDb.Title,
+                Author = bookDb.Author,
+                Id = bookDb.Id,
+            };
+
+            return book;
+        }
+
+        public bool UpdateBookInDatabase(BookModel bookModel)
+        {
+            var book = new BookData()
+            {
+                Title = bookModel.Title,
+                Author = bookModel.Author,
+                Id = bookModel.Id,
+            };
+
+            var bookDb = _context.Books
+                        .Where(b => b.Id == book.Id)
+                        .FirstOrDefault();
+
+            bookDb.Title = book.Title;
+            bookDb.Author = book.Author;
+
+
+            if (_context.Entry(bookDb).State != EntityState.Unchanged)
+            {
+                _context.SaveChanges();
+                return true;
+            }
+
+            return false;
+
+
+
+        }
     }
 }

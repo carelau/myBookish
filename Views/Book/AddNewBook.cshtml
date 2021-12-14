@@ -2,7 +2,7 @@
 
 <div class="container">
     <h3>Add New Book</h3>
-    @if (ViewBag.isSuccess)
+    @if (ViewBag.isSuccess == true)
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>Yay!</strong> You have successfully added a book into the database.
@@ -15,10 +15,12 @@
         <div class="form-group">
             <label asp-for="Title"></label>
             <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Author"></label>
             <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="submit" value="Add Book" class="btn btn-primary" />

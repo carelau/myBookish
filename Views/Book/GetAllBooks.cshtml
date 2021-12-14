@@ -10,12 +10,16 @@
     </thead>
     <tbody>
         @foreach (var book in Model)
+
         {
             <tr>
                 <td>@book.Title</td>
                 <td>@book.Author</td>
-                <td><a href="#"> Edit </a> <a href="#"> Delete </a></td>
+                <td><a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id"> Edit </a> <a href="#"> Delete
+                    </a> <a href="#"> Add
+                        Copy </a> </td>
             </tr>
+
         }
     </tbody>
 </table>

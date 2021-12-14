@@ -26,13 +26,17 @@ namespace mybookish.Controllers
         public IActionResult AddNewBook(BookModel bookModel)
         {
 
-            int id = _bookRepository.CreateBook(bookModel);
-
-            if (id > 0)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("AddNewBook", "Book", new { isSuccess = true });
+                int id = _bookRepository.CreateBook(bookModel);
+
+                if (id > 0)
+                {
+                    return RedirectToAction("AddNewBook", "Book", new { isSuccess = true });
+                }
             }
             return View();
+
         }
 
         public IActionResult GetAllBooks()
@@ -43,5 +47,26 @@ namespace mybookish.Controllers
             return View(books);
         }
 
+        public IActionResult EditBook(int id)
+        {
+            var book = _bookRepository.GetSingleBookById(id);
+            return View(book);
+        }
+
+        [HttpPost]
+        public IActionResult EditBook(BookModel bookModel)
+        {
+            bool isUpdate = _bookRepository.UpdateBookInDatabase(bookModel);
+
+            if (isUpdate == true)
+
+            { return RedirectToAction("GetAllBooks", "Book"); }
+
+            else
+            {
+                return View(bookModel);
+            }
+
+        }
     }
 }
