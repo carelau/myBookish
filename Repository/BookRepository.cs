@@ -41,7 +41,6 @@ namespace mybookish.Repository
             }
             return bookList;
         }
-
         public BookModel GetSingleBookById(int bookId)
         {
             var bookDb = _context.Books
@@ -57,7 +56,6 @@ namespace mybookish.Repository
 
             return book;
         }
-
         public bool UpdateBookInDatabase(BookModel bookModel)
         {
             var book = new BookData()
@@ -74,16 +72,47 @@ namespace mybookish.Repository
             bookDb.Title = book.Title;
             bookDb.Author = book.Author;
 
-
             if (_context.Entry(bookDb).State != EntityState.Unchanged)
             {
                 _context.SaveChanges();
                 return true;
             }
-
             return false;
+        }
+        public void DeleteBookInDatabase(BookModel bookModel)
+        {
+            var book = new BookData()
+            {
+                Title = bookModel.Title,
+                Author = bookModel.Author,
+                Id = bookModel.Id,
+            };
+            var bookDb = _context.Books
+                        .Where(b => b.Id == book.Id)
+                        .FirstOrDefault();
 
+            _context.Books.Remove(bookDb);
+            _context.SaveChanges();
 
+        }
+
+        public List<BookModel> SearchBookInDatabase(string bookName, string authorName)
+        {
+            var books = new List<BookModel>();
+            var searchedBooks = _context.Books
+                                .Where(x => x.Title.Contains(bookName) && x.Author.StartsWith(authorName))
+                                .ToList();
+
+            foreach (var book in searchedBooks)
+            {
+                books.Add(new BookModel()
+                {
+                    Title = book.Title,
+                    Author = book.Author,
+                    Id = book.Id,
+                });
+            }
+            return books;
 
         }
     }
