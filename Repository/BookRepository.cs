@@ -19,7 +19,9 @@ namespace mybookish.Repository
             var book = new BookData()
             {
                 Title = bookModel.Title,
-                Author = bookModel.Author
+                AuthorId = bookModel.AuthorId,
+                TotalCopies = 1,
+                AvailableCopies = 1,
             };
             _context.Books.Add(book);
 
@@ -28,49 +30,41 @@ namespace mybookish.Repository
         }
         public List<BookModel> GetListBooks()
         {
-            var bookList = new List<BookModel>();
-            var books = _context.Books.ToList();
-            foreach (var book in books)
+            return _context.Books.Select(x => new BookModel()
             {
-                bookList.Add(new BookModel()
-                {
-                    Title = book.Title,
-                    Author = book.Author,
-                    Id = book.Id,
-                });
-            }
-            return bookList;
+                Title = x.Title,
+                AuthorId = x.AuthorId,
+                AuthorName = x.Author.AuthorName,
+                Id = x.Id,
+                TotalCopies = x.TotalCopies,
+                AvailableCopies = x.AvailableCopies
+            }).ToList();
         }
+
         public BookModel GetSingleBookById(int bookId)
         {
-            var bookDb = _context.Books
-                       .Where(b => b.Id == bookId)
-                       .FirstOrDefault();
-
-            var book = new BookModel()
-            {
-                Title = bookDb.Title,
-                Author = bookDb.Author,
-                Id = bookDb.Id,
-            };
-
-            return book;
+            return _context.Books
+                     .Where(b => b.Id == bookId)
+                     .Select(x => new BookModel()
+                     {
+                         Title = x.Title,
+                         AuthorId = x.AuthorId,
+                         AuthorName = x.Author.AuthorName,
+                         Id = x.Id,
+                         TotalCopies = x.TotalCopies,
+                         AvailableCopies = x.AvailableCopies
+                     })
+                     .FirstOrDefault();
         }
+
         public bool UpdateBookInDatabase(BookModel bookModel)
         {
-            var book = new BookData()
-            {
-                Title = bookModel.Title,
-                Author = bookModel.Author,
-                Id = bookModel.Id,
-            };
-
             var bookDb = _context.Books
-                        .Where(b => b.Id == book.Id)
+                        .Where(b => b.Id == bookModel.Id)
                         .FirstOrDefault();
 
-            bookDb.Title = book.Title;
-            bookDb.Author = book.Author;
+            bookDb.Title = bookModel.Title;
+            bookDb.AuthorId = bookModel.AuthorId;
 
             if (_context.Entry(bookDb).State != EntityState.Unchanged)
             {
@@ -81,14 +75,8 @@ namespace mybookish.Repository
         }
         public void DeleteBookInDatabase(BookModel bookModel)
         {
-            var book = new BookData()
-            {
-                Title = bookModel.Title,
-                Author = bookModel.Author,
-                Id = bookModel.Id,
-            };
             var bookDb = _context.Books
-                        .Where(b => b.Id == book.Id)
+                        .Where(b => b.Id == bookModel.Id)
                         .FirstOrDefault();
 
             _context.Books.Remove(bookDb);
@@ -96,24 +84,20 @@ namespace mybookish.Repository
 
         }
 
-        public List<BookModel> SearchBookInDatabase(string bookName, string authorName)
+        public List<BookModel> SearchBookInDatabase(string bookName, int authorId)
         {
-            var books = new List<BookModel>();
-            var searchedBooks = _context.Books
-                                .Where(x => x.Title.Contains(bookName) && x.Author.StartsWith(authorName))
+            return _context.Books
+                                .Where(x => x.Title.StartsWith(bookName) && x.Author.Id == authorId)
+                                .Select(x => new BookModel()
+                                {
+                                    Title = x.Title,
+                                    AuthorId = x.AuthorId,
+                                    AuthorName = x.Author.AuthorName,
+                                    Id = x.Id,
+                                    TotalCopies = x.TotalCopies,
+                                    AvailableCopies = x.AvailableCopies
+                                })
                                 .ToList();
-
-            foreach (var book in searchedBooks)
-            {
-                books.Add(new BookModel()
-                {
-                    Title = book.Title,
-                    Author = book.Author,
-                    Id = book.Id,
-                });
-            }
-            return books;
-
         }
     }
 }

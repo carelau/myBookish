@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using mybookish.Models;
 using mybookish.Repository;
 
@@ -7,12 +8,15 @@ namespace mybookish.Controllers
     public class BookController : Controller
     {
         private readonly BookRepository _bookRepository;
-        public BookController(BookRepository bookRepository)
+        private readonly AuthorRepository _authorRepository;
+        public BookController(BookRepository bookRepository, AuthorRepository authorRepository)
         {
             _bookRepository = bookRepository;
+            _authorRepository = authorRepository;
         }
         public IActionResult AddNewBook(bool isSuccess = false)
         {
+            ViewBag.Author = new SelectList(_authorRepository.GetListAuthors(), "Id", "AuthorName");
             ViewBag.isSuccess = isSuccess;
             return View();
         }
@@ -30,6 +34,7 @@ namespace mybookish.Controllers
                     return RedirectToAction("AddNewBook", "Book", new { isSuccess = true });
                 }
             }
+            ViewBag.Author = new SelectList(_authorRepository.GetListAuthors(), "Id", "AuthorName");
             return View();
 
         }
@@ -42,9 +47,16 @@ namespace mybookish.Controllers
             return View(books);
         }
 
+        // public IActionResult GetAllBooks()
+        // {
+        //     var books = _bookRepository.GetListBooks();
+        //     return View(books);
+        // }
+
         public IActionResult EditBook(int id)
         {
             var book = _bookRepository.GetSingleBookById(id);
+            ViewBag.Author = new SelectList(_authorRepository.GetListAuthors(), "Id", "AuthorName");
             return View(book);
         }
 
@@ -59,6 +71,7 @@ namespace mybookish.Controllers
 
             else
             {
+                ViewBag.Author = new SelectList(_authorRepository.GetListAuthors(), "Id", "AuthorName");
                 return View(bookModel);
             }
         }
@@ -79,6 +92,7 @@ namespace mybookish.Controllers
 
         public IActionResult SearchBook()
         {
+            ViewBag.Author = new SelectList(_authorRepository.GetListAuthors(), "Id", "AuthorName");
             return View();
         }
 
@@ -87,15 +101,15 @@ namespace mybookish.Controllers
         {
             if (ModelState.IsValid)
             {
-                var books = _bookRepository.SearchBookInDatabase(bookModel.Title, bookModel.Author);
+                var books = _bookRepository.SearchBookInDatabase(bookModel.Title, bookModel.AuthorId);
                 ViewBag.isNull = false;
                 if (books.Count == 0)
                 {
                     ViewBag.isNull = true;
                 }
-                ViewBag.Message = "test";
                 return View(books);
             }
+            ViewBag.Author = new SelectList(_authorRepository.GetListAuthors(), "Id", "AuthorName");
             return View("SearchBook");
         }
     }

@@ -7,6 +7,7 @@ namespace mybookish.Database
     public class LibraryContext : DbContext
     {
         public DbSet<BookData> Books { get; set; }
+        public DbSet<AuthorData> Authors { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

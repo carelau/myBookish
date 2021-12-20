@@ -11,9 +11,13 @@ namespace mybookish.Models
         [StringLength(100, MinimumLength = 3)]
         public string Title { get; set; }
 
-        [Required]
+        public string AuthorName { get; set; }
 
-        [StringLength(100, MinimumLength = 3)]
-        public string Author { get; set; }
+        public int AuthorId { get; set; }
+
+        public int TotalCopies { get; set; }
+
+        public int AvailableCopies { get; set; }
+
     }
 }

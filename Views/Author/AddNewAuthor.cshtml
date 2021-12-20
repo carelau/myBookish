@@ -1,0 +1,23 @@
+@model BookModel
+
+<div class="container">
+    <h3>Add New Author</h3>
+    @if (ViewBag.isSuccess == true)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            You have successfully added an author!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    <form method="post" asp-action="AddNewAuthor" asp-controller="Author">
+        <div class="form-group">
+            <label asp-for="AuthorName"></label>
+            <input asp-for="AuthorName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Add Author" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

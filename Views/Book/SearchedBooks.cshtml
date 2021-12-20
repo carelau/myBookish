@@ -12,9 +12,12 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th scope="col">Id</th>
+            <th scope="col">Book Id</th>
             <th scope="col">Title</th>
-            <th scope="col">Author</th>
+            <th scope="col">Author Id</th>
+            <th scope="col">Author Name</th>
+            <th scope="col">Total Copies</th>
+            <th scope="col">Available Copies</th>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +25,12 @@
 
         {
             <tr>
-                <td>@book.Id</td>
+                <td class="text-center">@book.Id</td>
                 <td>@book.Title</td>
-                <td>@book.Author</td>
+                <td class="text-center">@book.AuthorId</td>
+                <td>@book.AuthorName</td>
+                <td class="text-center">@book.TotalCopies</td>
+                <td class="text-center">@book.AvailableCopies</td>
             </tr>
 
         }

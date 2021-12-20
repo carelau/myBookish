@@ -11,8 +11,12 @@
 <table class="table table-hover">
     <thead>
         <tr>
+            <th scope="col">Book Id</th>
             <th scope="col">Title</th>
-            <th scope="col">Author</th>
+            <th scope="col">Author Id</th>
+            <th scope="col">Author Name</th>
+            <th scope="col">Total Copies</th>
+            <th scope="col">Available Copies</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -21,8 +25,12 @@
 
         {
             <tr>
+                <td class="text-center">@book.Id</td>
                 <td>@book.Title</td>
-                <td>@book.Author</td>
+                <td class="text-center">@book.AuthorId</td>
+                <td>@book.AuthorName</td>
+                <td class="text-center">@book.TotalCopies</td>
+                <td class="text-center">@book.AvailableCopies</td>
                 <td><a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id"> Edit </a> <a
                     asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id"> Delete
                     </a> <a href="#"> Add
