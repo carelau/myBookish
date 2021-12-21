@@ -76,3 +76,11 @@ body {
   height: 15vw;
   object-fit: contain;
 }
+
+.col-md-4 {
+  padding: 15px;
+}
+
+.card {
+  height: 70vh;
+}

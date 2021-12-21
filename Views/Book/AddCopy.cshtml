@@ -1,0 +1,19 @@
+@model BookModel
+
+<div class="container">
+    <h3>Add Copy</h3>
+
+    <form method="post" asp-action="AddCopy" asp-controller="Book">
+        <div class="form-group">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" value=@Model.Title readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="AuthorName"></label>
+            <input asp-for="AuthorName" class="form-control" value=@Model.AuthorName readonly />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Add Copy?" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

@@ -38,20 +38,16 @@ namespace mybookish.Controllers
             return View();
 
         }
-        public IActionResult GetAllBooks(bool isDeleted = false)
+        public IActionResult GetAllBooks(bool isDeleted = false, bool isAdded = false, bool isCopyDeleted = false)
         {
 
             ViewBag.isDeleted = isDeleted;
+            ViewBag.isAdded = isAdded;
+            ViewBag.isCopyDeleted = isCopyDeleted;
             var books = _bookRepository.GetListBooks();
 
             return View(books);
         }
-
-        // public IActionResult GetAllBooks()
-        // {
-        //     var books = _bookRepository.GetListBooks();
-        //     return View(books);
-        // }
 
         public IActionResult EditBook(int id)
         {
@@ -111,6 +107,39 @@ namespace mybookish.Controllers
             }
             ViewBag.Author = new SelectList(_authorRepository.GetListAuthors(), "Id", "AuthorName");
             return View("SearchBook");
+        }
+
+        public IActionResult AddCopy(int id)
+        {
+            var book = _bookRepository.GetSingleBookById(id);
+            return View(book);
+        }
+
+        [HttpPost]
+        public IActionResult AddCopy(BookModel bookModel)
+        {
+            _bookRepository.AddCopyInDatabase(bookModel);
+
+            return RedirectToAction("GetAllBooks", "Book", new { isAdded = true });
+        }
+        public IActionResult DeleteCopy(int id)
+        {
+            var book = _bookRepository.GetSingleBookById(id);
+            ViewBag.Message = false;
+            if (book.TotalCopies <= 1 && book.AvailableCopies <= 1)
+            {
+                ViewBag.Message = true;
+            }
+
+            return View(book);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteCopy(BookModel bookModel)
+        {
+            _bookRepository.DeleteCopyInDatabase(bookModel);
+
+            return RedirectToAction("GetAllBooks", "Book", new { isCopyDeleted = true });
         }
     }
 }

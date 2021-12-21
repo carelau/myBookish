@@ -83,7 +83,6 @@ namespace mybookish.Repository
             _context.SaveChanges();
 
         }
-
         public List<BookModel> SearchBookInDatabase(string bookName, int authorId)
         {
             return _context.Books
@@ -98,6 +97,31 @@ namespace mybookish.Repository
                                     AvailableCopies = x.AvailableCopies
                                 })
                                 .ToList();
+        }
+
+        public void AddCopyInDatabase(BookModel bookModel)
+        {
+            var bookDb = _context.Books
+                       .Where(b => b.Id == bookModel.Id)
+                       .FirstOrDefault();
+
+            bookDb.TotalCopies += 1;
+            bookDb.AvailableCopies += 1;
+            _context.SaveChanges();
+        }
+        public void DeleteCopyInDatabase(BookModel bookModel)
+        {
+            var bookDb = _context.Books
+                       .Where(b => b.Id == bookModel.Id)
+                       .FirstOrDefault();
+
+            if (bookDb.TotalCopies <= 1 && bookDb.AvailableCopies <= 1)
+            {
+                _context.Books.Remove(bookDb);
+            }
+            bookDb.TotalCopies -= 1;
+            bookDb.AvailableCopies -= 1;
+            _context.SaveChanges();
         }
     }
 }

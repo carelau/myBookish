@@ -8,6 +8,24 @@
         </button>
     </div>
 }
+@if (ViewBag.isAdded == true)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        You have successfully added a copy of this book to the database.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+@if (ViewBag.isCopyDeleted == true)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        You have successfully deleted a copy of this book from the database.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 <table class="table table-hover">
     <thead>
         <tr>
@@ -22,7 +40,6 @@
     </thead>
     <tbody>
         @foreach (var book in Model)
-
         {
             <tr>
                 <td class="text-center">@book.Id</td>
@@ -31,12 +48,12 @@
                 <td>@book.AuthorName</td>
                 <td class="text-center">@book.TotalCopies</td>
                 <td class="text-center">@book.AvailableCopies</td>
-                <td><a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id"> Edit </a> <a
-                    asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id"> Delete
-                    </a> <a href="#"> Add
-                        Copy </a> </td>
-            </tr>
-
-        }
+                <td> 
+                    <a asp-controller="Book" asp-action="EditBook" asp-route-id="@book.Id"> Edit </a>
+                     <a asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id"> Delete </a>
+                      <a asp-controller="Book" asp-action="AddCopy" asp-route-id="@book.Id"> AddCopy </a>
+                      <a asp-controller="Book" asp-action="DeleteCopy" asp-route-id="@book.Id"> RemoveCopy </a> </td>
+            </tr> 
+        } 
     </tbody>
 </table>
