@@ -1,10 +1,11 @@
 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace mybookish.Database
 {
-    public class LibraryContext : DbContext
+    public class LibraryContext : IdentityDbContext
     {
         public DbSet<BookData> Books { get; set; }
         public DbSet<AuthorData> Authors { get; set; }
