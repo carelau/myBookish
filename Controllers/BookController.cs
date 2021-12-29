@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using mybookish.Models;
@@ -14,6 +15,7 @@ namespace mybookish.Controllers
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
         }
+        [Authorize]
         public IActionResult AddNewBook(bool isSuccess = false)
         {
             ViewBag.Author = new SelectList(_authorRepository.GetListAuthors(), "Id", "AuthorName");
@@ -122,6 +124,7 @@ namespace mybookish.Controllers
 
             return RedirectToAction("GetAllBooks", "Book", new { isAdded = true });
         }
+
         public IActionResult DeleteCopy(int id)
         {
             var book = _bookRepository.GetSingleBookById(id);

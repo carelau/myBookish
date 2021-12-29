@@ -15,7 +15,6 @@ namespace mybookish.Repository
         {
             _userManager = userManager;
             _signInManager = signInManager;
-
         }
         public async Task<IdentityResult> AddUser(RegisterModel registerModel)
         {
@@ -32,17 +31,13 @@ namespace mybookish.Repository
 
         public async Task<SignInResult> LogInUser(SignInModel signInModel)
         {
-
             var result = await _signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, false, false);
-
             return result;
         }
 
         public async Task LogOutUser()
         {
-
             await _signInManager.SignOutAsync();
-
         }
     }
 }

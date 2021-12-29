@@ -30,6 +30,10 @@ namespace mybookish
 
             services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<LibraryContext>();
+            services.ConfigureApplicationCookie(config =>
+        {
+            config.LoginPath = "/Account/SignIn";
+        });
 
         }
 
@@ -50,10 +54,8 @@ namespace mybookish
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthorization();
-
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

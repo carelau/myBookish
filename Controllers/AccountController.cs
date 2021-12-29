@@ -45,15 +45,21 @@ namespace mybookish.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn(SignInModel signInModel)
+        public async Task<IActionResult> SignIn(SignInModel signInModel, string returnUrl)
         {
-
             if (ModelState.IsValid)
             {
                 var result = await _accountRepository.LogInUser(signInModel);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
                 }
                 ModelState.AddModelError("", "Invalid Login Attempt");
             }
@@ -62,7 +68,6 @@ namespace mybookish.Controllers
         public async Task<IActionResult> Logout()
         {
             await _accountRepository.LogOutUser();
-
             return RedirectToAction("Index", "Home");
         }
     }
