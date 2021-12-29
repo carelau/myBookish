@@ -10,10 +10,12 @@ namespace mybookish.Repository
     public class AccountRepository
     {
         private readonly UserManager<IdentityUser> _userManager;
-
-        public AccountRepository(UserManager<IdentityUser> userManager)
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public AccountRepository(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
+
         }
         public async Task<IdentityResult> AddUser(RegisterModel registerModel)
         {
@@ -28,5 +30,19 @@ namespace mybookish.Repository
             return result;
         }
 
+        public async Task<SignInResult> LogInUser(SignInModel signInModel)
+        {
+
+            var result = await _signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, false, false);
+
+            return result;
+        }
+
+        public async Task LogOutUser()
+        {
+
+            await _signInManager.SignOutAsync();
+
+        }
     }
 }

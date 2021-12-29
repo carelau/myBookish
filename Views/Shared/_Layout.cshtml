@@ -1,5 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
 
 <head>
     <meta charset="utf-8" />
@@ -44,11 +46,30 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="SearchBook">
                                 Search Catalogue </a>
                         </li>
-                        <div class="ml-auto"></div>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">
-                                Register </a>
-                        </li>
+
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <div class="ml-auto"></div>
+                            <li class="nav-item">
+                                <form method="post" asp-action="LogOut" asp-controller="Account">
+                                    @User.Identity.Name
+                                    <input type="submit" value="LogOut" class="btn btn-primary" />
+                                </form>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <div class="ml-auto"></div>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">
+                                    Register </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SignIn">
+                                    Log In </a>
+                            </li>
+                        }
                 </div>
                 </ul>
             </div>

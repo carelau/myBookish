@@ -39,5 +39,31 @@ namespace mybookish.Controllers
             return View();
 
         }
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(SignInModel signInModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var result = await _accountRepository.LogInUser(signInModel);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                ModelState.AddModelError("", "Invalid Login Attempt");
+            }
+            return View(signInModel);
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await _accountRepository.LogOutUser();
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
